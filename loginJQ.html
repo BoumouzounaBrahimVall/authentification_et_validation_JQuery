@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <style>
+      h1{
+            margin: 100px;
+        }
+       .error{
+            border-color: red;
+            color: red;
+            border-width: 2px;
+        }
+        .good{
+            display: none;
+            border-color: green;
+            color: green;
+            border-width: 2px;
+        }
+    </style>
+</head>
+<body>
+  
+</h1>
+<div class="container ">
+    <a href="signupJQ.html" class="link-primary">signup?</a>
+  <h1 class="text-center text-primary">
+    AHTHENTIFICATION AVEC JQUERY</h1>
+    
+  <form style="margin: 200px;" id="frm">
+    <div class="form-group">
+      <label for="InputEmail">Email address</label>
+      <input type="text" name="email" class="form-control" id="InputEmail" placeholder="Enter email">    
+    </div>
+    <div class="form-group">
+      <label for="InputPassword1">Password</label>
+      <input type="password" name="pass" class="form-control" id="InputPassword1" placeholder="Password">   
+    </div>
+      <div class="colomn text-center good" id="er">Vous etes connecté</div>
+      <butto class="btn btn-primary" type="submit">Login</button>
+  </form>
+ 
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.js" ></script>
+<script src="https://cdn.rawgit.com/placemarker/jQuery-MD5/master/jquery.md5.js"></script>
+<script >
+    $(document).ready(function () {
+  
+  var $formulaire=$("#frm");
+  //verification si l'email deja enregistrer
+  $.validator.addMethod("existe",function(value,elem){
+     if(localStorage.getItem(value))return true;
+     return false;
+  },"compte ou mot de passe incorrect");
+  if($formulaire.length){
+      $formulaire.validate({
+          rules:{
+              email:{
+                  required:true,
+                  existe:true
+              },
+              pass:{
+                  required:true
+              },        
+          },
+          messages:{
+              email:{
+                  required:"email vide!!!!!",
+              },
+              pass:{
+                  required:"mot de pass vide !!!!!"
+              },
+          }
+      })
+  }   
+ $('.btn').click(function () {
+     if($formulaire.valid()){
+         var user=localStorage.getItem($("#InputEmail").val());
+          const data=JSON.parse(user);
+          if(data.email==$("#InputEmail").val()&&
+              data.motPass==$.md5($("#InputPassword1").val()))//hachage avec md5
+          {
+              $("#er").show().addClass("good").removeClass("error")
+              .html("vous etes inscrit"); 
+          }else{
+              $("#er").show().removeClass("good").addClass("error")
+              .html("compte ou mot de passe incorrect");
+          }
+     }
+ });
+});
+</script>
+</body>
+</html>
